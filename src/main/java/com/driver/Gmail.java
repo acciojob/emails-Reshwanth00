@@ -47,7 +47,7 @@ public class Gmail extends Email {
 
     public String findOldestMessage(){
         if(inbox.size()==0){
-            return "null";
+            return null;
         }
         else {
             return this.inbox.getFirst().message;
