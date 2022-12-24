@@ -3,9 +3,10 @@ package com.driver;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
+import java.lang.AssertionError;
 
 public class Main {
-    public static void main(String[] args){
+    public static void main(String[] args) throws ParseException {
         Email email = new Email("accio@gmail.com");
         email.changePassword("Accio@123", "V12@");
         email.changePassword("Acio@123", "V12@v");
