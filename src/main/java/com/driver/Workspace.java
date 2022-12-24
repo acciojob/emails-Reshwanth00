@@ -19,6 +19,6 @@ public class Workspace extends Gmail{
     }
 
     public int findMaxMeetings(){
-        return 0;
+        return calender.size();
     }
 }
