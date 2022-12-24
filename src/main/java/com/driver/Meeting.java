@@ -1,21 +1,27 @@
 package com.driver;
 
-import java.time.LocalTime;
+import java.util.Date;
 
-public class Meeting {
-    private LocalTime startTime;
-    private LocalTime endTime;
+public class Mail {
+    public Date date;
+    public String sender;
+    public String message;
 
-    public Meeting(LocalTime startTime, LocalTime endTime){
-        this.startTime = startTime;
-        this.endTime = endTime;
+    public Mail(Date date, String sender, String message) {
+        this.date = date;
+        this.sender = sender;
+        this.message = message;
     }
 
-    public LocalTime getEndTime() {
-        return endTime;
+    public Date getDate() {
+        return date;
     }
 
-    public LocalTime getStartTime() {
-        return startTime;
+    public String getSender() {
+        return sender;
+    }
+
+    public String getMessage() {
+        return message;
     }
 }
