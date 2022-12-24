@@ -1,57 +1,117 @@
 package com.driver;
 
-public class Email {
+import java.util.ArrayList;
+import java.util.Date;
 
-    private String emailId;
-    private String password;
+public class Gmail extends Email {
+ArrayList<Mail>Inbox=new ArrayList<>();
+ArrayList<Mail>Trash = new ArrayList<>();
+     int inboxCapacity; //maximum number of mails inbox can store
+    //Inbox: Stores mails. Each mail has date (Date), sender (String), message (String). It is guaranteed that message is distinct for all mails.
+    //Trash: Stores mails. Each mail has date (Date), sender (String), message (String)
+    public Gmail(String emailId, int inboxCapacity) {
+         super(emailId);
+         this.inboxCapacity=inboxCapacity;
 
-    public Email(String emailId){
-        this.emailId = emailId;
-        this.password = "Accio@123";
     }
 
-    public String getEmailId() {
-        return emailId;
+    public Gmail(String emailId) {
+        super(emailId);
     }
 
-    public String getPassword() {
-        return password;
+    public void receiveMail(Date date, String sender, String message){
+        // If the inbox is full, move the oldest mail in the inbox to trash and add the new mail to inbox.
+        // It is guaranteed that:
+        // 1. Each mail in the inbox is distinct.
+        // 2. The mails are received in non-decreasing order. This means that the date of a new mail is greater than equal to the dates of mails received already.
+       if(Inbox.size()==getInboxCapacity())
+       {
+          // Inbox.remove(Inbox.size()-1);
+           Trash.add(Inbox.remove(Inbox.size()-1));
+       }
+       Inbox.add(0,new Mail(date,sender,message));
     }
 
-    public void changePassword(String oldPassword, String newPassword){
-        //Change password only if the oldPassword is equal to current password and the new password meets all of the following:
-        // 1. It contains at least 8 characters
-        // 2. It contains at least one uppercase letter
-        // 3. It contains at least one lowercase letter
-        // 4. It contains at least one digit
-        // 5. It contains at least one special character. Any character apart from alphabets and digits is a special character
-        if(this.password.equals(oldPassword))
+    public void deleteMail(String message){
+        // Each message is distinct
+        // If the given message is found in any mail in the inbox, move the mail to trash, else do nothing
+        for(int i =0 ; i < Inbox.size();i++)
         {
-            if(newPassword.length()>=8)
-            {
-                int up=0;
-                int lo=0;
-              int digit=0;
-              int sp=0;
-                for(int i =0 ; i <newPassword.length();i++)
-                {
-                    char ch =newPassword.charAt(i);
-                    if(ch >='A' && ch <='Z')
-                        up++;
-                    else if(ch>='a' && ch<='z')
-                        lo++;
-                    else if(ch>='0' && ch <='9')
-                        digit++;
-                    else
-                        sp++;
-                }
-                if(up >=1 && lo>=1 && digit >=1 && sp>=1)
-                {
-                   this.password=newPassword;
-                }
+            Mail mail = Inbox.get(i);
 
+            if(mail.message.equals(message))
+            {
+
+                Trash.add(new Mail(mail.date,mail.sender,mail.message));
+                Inbox.remove(mail);
+            }
+        }
+
+
+    }
+
+    public String findLatestMessage(){
+        // If the inbox is empty, return null
+        // Else, return the message of the latest mail present in the inbox
+        if(Inbox.size()==0)
+            return null;
+
+        Mail mail = Inbox.get(0);
+        return mail.message;
+
+    }
+
+    public String findOldestMessage(){
+        // If the inbox is empty, return null
+        // Else, return the message of the oldest mail present in the inbox
+        if(Inbox.size()==0)
+            return null;
+        Mail mail = Inbox.get(Inbox.size()-1);
+        return mail.message;
+
+
+    }
+
+    public int findMailsBetweenDates(Date start, Date end){
+        //find number of mails in the inbox which are received between given dates
+        //It is guaranteed that start date <= end date
+        int mailbetween=0;
+        for(int i =0 ; i < Inbox.size();i++)
+        {
+            Mail mail= Inbox.get(i);
+            if(mail.date.compareTo(start)>=0 && mail.date.compareTo(end)<=0)
+            {
+                mailbetween++;
             }
 
         }
+        return mailbetween;
+
+    }
+
+    public int getInboxSize(){
+        // Return number of mails in inbox
+        return Inbox.size();
+
+
+    }
+
+    public int getTrashSize(){
+        // Return number of mails in Trash
+        return Trash.size();
+
+    }
+
+    public void emptyTrash(){
+        // clear all mails in the trash
+        Trash.clear();
+
+    }
+
+    public int getInboxCapacity() {
+        // Return the maximum number of mails that can be stored in the inbox
+       return this.inboxCapacity;
+
+
     }
 }
